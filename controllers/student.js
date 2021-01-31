@@ -29,7 +29,7 @@ exports.createStudent = (req, res, next) => {
             res.send({
                 isError: false,
                 isCreated: created,
-                user: result,
+                result: result,
             });
         })
         .catch((err) => {

@@ -4,6 +4,11 @@ const sequelize = require("./util/database");
 
 const studentRouters = require("./routes/student");
 const courseRoutes = require("./routes/course");
+const resultRouters = require("./routes/result");
+
+const Student = require("./models/Student");
+const Course = require("./models/Course");
+const Result = require("./models/Result");
 
 const app = express();
 
@@ -15,8 +20,25 @@ app.use(
 
 app.use(bodyParser.json());
 
+//Routes
 app.use("/student", studentRouters);
 app.use("/course", courseRoutes);
+app.use("/result", resultRouters);
+
+//Database Relations
+Student.hasMany(Result, {
+    foreignKey: {
+        name: "studentId",
+        allowNull: false,
+    },
+});
+
+Course.hasMany(Result, {
+    foreignKey: {
+        name: "courseId",
+        allowNull: false,
+    },
+});
 
 sequelize
     .sync()
