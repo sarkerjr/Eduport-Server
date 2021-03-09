@@ -48,3 +48,8 @@ exports.getStudents = (req, res, next) => {
         })
         .catch((err) => console.log(err));
 };
+
+//Get a single student profile
+// exports.getStudentProfile = (req, res, next) => {
+//     Student.findByPk(req.body);
+// };
