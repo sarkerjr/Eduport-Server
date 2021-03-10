@@ -9,21 +9,9 @@ const courseController = require("../controllers/course");
 router.post(
     "/createCourse",
     body("courseName")
-        //Only letters, numbers and spaces allowd
-        .custom((value, { req }) => {
-            for (let s of req.body.courseName) {
-                if (
-                    !(
-                        (48 <= s.charCodeAt() && s.charCodeAt() <= 57) ||
-                        (65 <= s.charCodeAt() && s.charCodeAt() <= 90) ||
-                        (97 <= s.charCodeAt() && s.charCodeAt() <= 122) ||
-                        s.charCodeAt() == 32
-                    )
-                )
-                    throw new Error("Name can only contain letters.");
-            }
-            return true;
-        }),
+        .matches(/^[a-z ]+$/i)
+        .withMessage("Field can only contain alphabets!")
+        .trim(),
     body("courseCode")
         .isAlphanumeric()
         .withMessage(

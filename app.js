@@ -2,15 +2,18 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const sequelize = require("./util/database");
 
+//For routes
 const studentRouters = require("./routes/student");
 const courseRoutes = require("./routes/course");
 const resultRouters = require("./routes/result");
 const teacherRouters = require("./routes/teacher");
 
+//For Database Models
 const Student = require("./models/Student");
 const Course = require("./models/Course");
 const Result = require("./models/Result");
 const Teacher = require("./models/Teacher");
+const StudentProfile = require("./models/StudentProfile");
 
 const app = express();
 
@@ -43,6 +46,14 @@ Course.hasMany(Result, {
     },
 });
 
+Student.hasOne(StudentProfile, {
+    foreignKey: {
+        name: "studentNo",
+        allowNull: false
+    }
+});
+
+//Starting listning to app
 sequelize
     .sync()
     .then((result) => {

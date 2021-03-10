@@ -4,24 +4,13 @@ const { body } = require("express-validator");
 const router = express.Router();
 
 const studentController = require("../controllers/student");
+const StudentProfile = require("../models/StudentProfile");
 
 router.post(
     "/createStudent",
     body("studentName")
-        //Only letters and spaces allowd
-        .custom((value, { req }) => {
-            for (let s of req.body.studentName) {
-                if (
-                    !(
-                        (65 <= s.charCodeAt() && s.charCodeAt() <= 90) ||
-                        (97 <= s.charCodeAt() && s.charCodeAt() <= 122) ||
-                        s.charCodeAt() == 32
-                    )
-                )
-                    throw new Error("Name can only contain letters");
-            }
-            return true;
-        })
+        .matches(/^[a-z ]+$/i)
+        .withMessage("Field can only contain alphabets!")
         .trim(),
     body("studentId")
         .isAlphanumeric()
@@ -59,5 +48,30 @@ router.post(
 );
 
 router.get("/getStudents", studentController.getStudents);
+
+router.post(
+    "/newSudentProfile",
+    body("studentNo")
+        .custom((value, { req }) => {
+            return StudentProfile.findOne({where: { studentNo: value }}).then((result) => {
+                if (result) {
+                    return Promise.reject("Student ID already exists!");
+                }
+            });
+        }),
+    body("studentEmail")
+        .isEmail()
+        .withMessage("Please enter a valid email.")
+        .custom((value, { req }) => {
+            return StudentProfile.findOne({where: { email: value }}).then((result) => {
+                if (result) {
+                    return Promise.reject("E-Mail address already exists!");
+                }
+            });
+        })
+        .normalizeEmail(),
+    body("studentPassword").trim().isLength({ min: 6 }).withMessage("Password minimum length: 6"),
+    studentController.createStudentProfile
+);
 
 module.exports = router;

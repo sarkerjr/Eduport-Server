@@ -5,6 +5,21 @@ const router = express.Router();
 
 const teacherControllelr = require("../controllers/teacher");
 
-router.post("/createTeacher", teacherControllelr.createTeacher);
+router.post(
+    "/createTeacher",
+    body("teacherName")
+        .matches(/^[a-z ]+$/i)
+        .withMessage("Field can only contain alphabets!")
+        .trim(),
+    body("position")
+        .matches(/^[a-z ]+$/i)
+        .withMessage("Field can only contain alphabets!")
+        .trim(),
+    body("teacherDepartment")
+        .matches(/^[a-z ]+$/i)
+        .withMessage("Field can only contain alphabets!")
+        .trim(),
+    teacherControllelr.createTeacher
+);
 
 module.exports = router;
