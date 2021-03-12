@@ -1,7 +1,8 @@
+const { validationResult } = require("express-validator");
+
 const Student = require("../models/Student");
 const StudentProfile = require("../models/StudentProfile");
-
-const { validationResult } = require("express-validator");
+const Result = require("../models/Result");
 
 //create a new student profile
 exports.createStudent = (req, res, next) => {
@@ -59,7 +60,7 @@ exports.createStudentProfile = (req, res, next) => {
             errorMessage: errors.array(),
         });
     }
-    
+
     StudentProfile.findOrCreate({
         where: {
             studentNo: req.body.studentNo,
@@ -78,6 +79,62 @@ exports.createStudentProfile = (req, res, next) => {
         .catch((err) => {
             console.log(err);
             res.status(206);
+            res.send({
+                isError: true,
+            });
+        });
+};
+
+//Retrieve login student information
+exports.getStudentProfile = (req, res, next) => {
+    Student.findOne({
+        where: {
+            id: req.body.studentDBId,
+        },
+    })
+        .then((result) => {
+            if (result) {
+                res.status(200);
+                res.send({
+                    studentDetails: result,
+                });
+            } else {
+                res.status(404);
+                res.send({
+                    message: "Student Not Found",
+                });
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+            res.status(404);
+            res.send({
+                isError: true,
+            });
+        });
+};
+
+//Retrieving result for login user
+exports.getResults = (req, res, next) => {
+    Result.findAll({
+        where: {
+            studentId: req.body.studentDBId,
+        },
+    })
+        .then((result) => {
+            if (result) {
+                res.status(200);
+                res.send(result);
+            } else {
+                res.status(404);
+                res.send({
+                    message: "No result found!"
+                });
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+            res.status(404);
             res.send({
                 isError: true,
             });

@@ -4,6 +4,8 @@ const { body } = require("express-validator");
 const router = express.Router();
 
 const studentController = require("../controllers/student");
+
+const Student = require("../models/Student");
 const StudentProfile = require("../models/StudentProfile");
 
 router.post(
@@ -51,27 +53,39 @@ router.get("/getStudents", studentController.getStudents);
 
 router.post(
     "/newSudentProfile",
-    body("studentNo")
-        .custom((value, { req }) => {
-            return StudentProfile.findOne({where: { studentNo: value }}).then((result) => {
+    body("studentNo").custom((value, { req }) => {
+        return StudentProfile.findOne({ where: { studentNo: value } }).then(
+            (result) => {
                 if (result) {
                     return Promise.reject("Student ID already exists!");
                 }
-            });
-        }),
+            }
+        );
+    }),
     body("studentEmail")
         .isEmail()
         .withMessage("Please enter a valid email.")
         .custom((value, { req }) => {
-            return StudentProfile.findOne({where: { email: value }}).then((result) => {
-                if (result) {
-                    return Promise.reject("E-Mail address already exists!");
+            return StudentProfile.findOne({ where: { email: value } }).then(
+                (result) => {
+                    if (result) {
+                        return Promise.reject("E-Mail address already exists!");
+                    }
                 }
-            });
+            );
         })
         .normalizeEmail(),
-    body("studentPassword").trim().isLength({ min: 6 }).withMessage("Password minimum length: 6"),
+    body("studentPassword")
+        .trim()
+        .isLength({ min: 6 })
+        .withMessage("Password minimum length: 6"),
     studentController.createStudentProfile
 );
+
+//Get currently login user profile
+router.get("/profile", studentController.getStudentProfile);
+
+//Get currently login user profile
+router.get("/profile/results", studentController.getResults);
 
 module.exports = router;
