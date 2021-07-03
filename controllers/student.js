@@ -128,7 +128,7 @@ exports.getResults = (req, res, next) => {
             } else {
                 res.status(404);
                 res.send({
-                    message: "No result found!"
+                    message: "No result found!",
                 });
             }
         })

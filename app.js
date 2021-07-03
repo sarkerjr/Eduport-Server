@@ -7,6 +7,7 @@ const studentRouters = require("./routes/student");
 const courseRoutes = require("./routes/course");
 const resultRouters = require("./routes/result");
 const teacherRouters = require("./routes/teacher");
+const authRouters = require('./routes/auth');
 
 //For Database Models
 const Student = require("./models/Student");
@@ -30,6 +31,7 @@ app.use("/student", studentRouters);
 app.use("/course", courseRoutes);
 app.use("/result", resultRouters);
 app.use("/teacher", teacherRouters);
+app.use("/auth", authRouters);
 
 //Database Relations
 Student.hasMany(Result, {
@@ -58,7 +60,7 @@ sequelize
     .sync()
     .then((result) => {
         console.log("DATABASE CONNECTED");
-        app.listen(3000);
+        app.listen(8080);
     })
     .catch((err) => {
         console.log(err);

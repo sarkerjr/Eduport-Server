@@ -41,7 +41,7 @@ router.post(
                 "AB-",
                 "O-",
             ];
-            for (b of bloodTypes) {
+            for (let b of bloodTypes) {
                 if (req.body.bloodGroup == b) return true;
             }
             throw new Error("Blood group not exist!");
