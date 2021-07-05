@@ -5,6 +5,7 @@ const router = express.Router();
 
 const Course = require("../models/Course");
 const courseController = require("../controllers/course");
+const isAuth = require("../middleware/is-auth");
 
 router.post(
     "/createCourse",
@@ -37,6 +38,7 @@ router.post(
     body("assignedSemester")
         .isNumeric()
         .withMessage("Semester can only contain numeric value"),
+    isAuth,
     courseController.createCourse
 );
 

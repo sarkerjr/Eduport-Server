@@ -1,5 +1,4 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const sequelize = require("./util/database");
 
 //For routes
@@ -18,13 +17,22 @@ const StudentProfile = require("./models/StudentProfile");
 
 const app = express();
 
-app.use(
-    bodyParser.urlencoded({
-        extended: true,
-    })
-);
+app.use(express.urlencoded({extended: true}));
+app.use(express.json()) // To parse the incoming requests with JSON payloads
 
-app.use(bodyParser.json());
+//For adding headers
+app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader(
+        "Access-Control-Allow-Methods",
+        "OPTIONS, GET, POST, PUT, PATCH, DELETE"
+    );
+    res.setHeader(
+        "Access-Control-Allow-Headers",
+        "Content-Type, Authorization"
+    );
+    next();
+});
 
 //Routes
 app.use("/student", studentRouters);

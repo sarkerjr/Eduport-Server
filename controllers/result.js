@@ -1,6 +1,7 @@
 const { validationResult } = require("express-validator");
 
 const Result = require("../models/Result");
+const jwt = require('jsonwebtoken');
 
 exports.createResult = (req, res, next) => {
     Result.findOrCreate({
@@ -9,7 +10,7 @@ exports.createResult = (req, res, next) => {
             courseId: req.body.courseId,
             score: req.body.score,
             cgpa: req.body.cgpa,
-            type: req.body.type
+            type: req.body.type,
         },
     })
         .then(([result, created]) => {
@@ -22,9 +23,30 @@ exports.createResult = (req, res, next) => {
         })
         .catch((err) => {
             console.log(err);
-            res.status(206);
-            res.send({
-                isError: true,
-            });
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
         });
+};
+
+exports.getResults = async (req, res, next) => {
+    try {
+        const results = await Result.findAll({
+            where: {
+                studentId: req.body.userId,
+            },
+        });
+
+        if (results)
+            res.status(200).json(results);
+        else
+            res.status(404).send('NO RESULT FOUND!');
+    } catch (err) {
+        console.log(err);
+        if (!err.statusCode) {
+            err.statusCode = 500;
+        }
+        next(err);
+    }
 };
