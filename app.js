@@ -49,12 +49,12 @@ Student.hasMany(Result, {
     },
 });
 
-// Course.hasMany(Result, {
-//     foreignKey: {
-//         name: "courseId",
-//         allowNull: false,
-//     },
-// });
+Course.hasMany(Result, {
+    foreignKey: {
+        name: "courseId",
+        allowNull: false,
+    },
+});
 
 Course.hasMany(Result);
 
