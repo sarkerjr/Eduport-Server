@@ -9,6 +9,11 @@ const Student = sequelize.define('student', {
         allowNull: false,
         primaryKey: true
     },
+    userId: {
+        type: Sequelize.DataTypes.INTEGER,
+        allowNull: false,
+        unique: true
+    },
     studentName: {
         type: Sequelize.DataTypes.STRING,
         allowNull: false
@@ -17,26 +22,18 @@ const Student = sequelize.define('student', {
         type: Sequelize.DataTypes.STRING,
         allowNull: false
     },
-    session: {
+    department: {
         type: Sequelize.DataTypes.STRING,
         allowNull: false
     },
-    dateOfBirth: {
-        type: Sequelize.DATEONLY,
+    session: {
+        type: Sequelize.DataTypes.STRING,
         allowNull: false
     },
     hall: {
         type: Sequelize.STRING,
         allowNull: false
     },
-    bloodGroup: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    permanentAddress: {
-        type: Sequelize.STRING,
-        allowNull: false
-    }
 });
 
 module.exports = Student;

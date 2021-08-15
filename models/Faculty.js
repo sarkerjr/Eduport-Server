@@ -2,7 +2,7 @@ const Sequelize = require("sequelize");
 
 const sequelize = require("../util/database");
 
-const Teacher = sequelize.define("teacher", {
+const Faculty = sequelize.define("faculties", {
     id: {
         type: Sequelize.DataTypes.INTEGER,
         autoIncrement: true,
@@ -20,7 +20,11 @@ const Teacher = sequelize.define("teacher", {
     department: {
         type: Sequelize.DataTypes.STRING,
         allowNull: false,
-    }
+    },
+    status: {
+        type: Sequelize.DataTypes.STRING,
+        allowNull: false,
+    },
 });
 
-module.exports = Teacher;
+module.exports = Faculty;

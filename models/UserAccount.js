@@ -2,16 +2,12 @@ const Sequelize = require('sequelize');
 
 const sequelize = require('../util/database');
 
-const User = sequelize.define('user', {
+const UserAccount = sequelize.define('user_account', {
     id: {
         type: Sequelize.DataTypes.INTEGER,
         autoIncrement: true,
         allowNull: false,
         primaryKey: true
-    },
-    userId: {
-        type: Sequelize.DataTypes.INTEGER,
-        allowNull: false
     },
     email: {
         type: Sequelize.DataTypes.STRING,
@@ -21,10 +17,14 @@ const User = sequelize.define('user', {
         type: Sequelize.DataTypes.STRING,
         allowNull: false
     },
-    category: {
+    accountType: {
+        type: Sequelize.DataTypes.STRING,
+        allowNull: false
+    },
+    department: {
         type: Sequelize.DataTypes.STRING,
         allowNull: false
     },
 });
 
-module.exports = User;
+module.exports = UserAccount;

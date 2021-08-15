@@ -21,10 +21,6 @@ const Course = sequelize.define('course', {
         type: Sequelize.DataTypes.FLOAT,
         allowNull: false
     },
-    assignedSemester: {
-        type: Sequelize.DataTypes.FLOAT,
-        allowNull: false
-    }
 });
 
 module.exports = Course;
