@@ -7,6 +7,7 @@ const courseRoutes = require("./routes/course");
 const resultRouters = require("./routes/result");
 const teacherRouters = require("./routes/teacher");
 const authRouters = require('./routes/auth');
+const userRouters = require('./routes/user');
 
 //For Database Models
 const Student = require("./models/Student");
@@ -35,6 +36,7 @@ app.use((req, res, next) => {
 });
 
 //Routes
+app.use("/user", userRouters);
 app.use("/student", studentRouters);
 app.use("/course", courseRoutes);
 app.use("/result", resultRouters);
