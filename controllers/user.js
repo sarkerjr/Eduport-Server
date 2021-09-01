@@ -1,6 +1,17 @@
-const user = require("../models/UserAccount");
+const { validationResult } = require("express-validator");
+
+const User = require("../models/UserAccount");
 
 exports.createUser = async (req, res, next) => {
+    //Check for validation error
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).send({
+            isError: true,
+            errorMessage: errors.array(),
+        });
+    }
+
     try {
         const user = await User.findOrCreate({
             where: {
@@ -18,25 +29,7 @@ exports.createUser = async (req, res, next) => {
             });
         }
     } catch (err) {
+        console.log(err);
         res.status(502).send("Can not create user!");
-    }
-};
-
-exports.loginUser = async (req, res, next) => {
-    try {
-        const user = await User.find({
-            where: {
-                email: email,
-                password: password,
-            },
-        });
-
-        if (user) {
-            res.status(200).json({
-                user: user,
-            });
-        } else res.status(404).send("user not found!");
-    } catch (err) {
-        res.status(502).send("Can not login user!");
     }
 };

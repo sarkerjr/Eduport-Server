@@ -4,8 +4,11 @@ const sequelize = require("../util/database");
 
 const FacultyDetail = sequelize.define("faculty_details", {
     facultyId: {
-        type: Sequelize.INT,
+        type: Sequelize.INTEGER,
+        primaryKey: true,
         allowNull: false,
+        autoIncrement: false,
+        unique: true
     },
     email: {
         type: Sequelize.STRING,
@@ -15,23 +18,19 @@ const FacultyDetail = sequelize.define("faculty_details", {
         type: Sequelize.STRING,
         allowNull: true,
     },
-    designation: {
-        type: Sequelize.STRING,
-        allowNull: false,
-    },
     website: {
         type: Sequelize.STRING,
         allowNull: true,
     },
-    academicBg: {
+    academic: {
         type: Sequelize.TEXT,
         allowNull: false,
     },
-    researchBg: {
+    research: {
         type: Sequelize.TEXT,
         allowNull: false,
     },
-    publicationBg: {
+    publications: {
         type: Sequelize.TEXT,
         allowNull: false,
     },

@@ -5,21 +5,25 @@ const sequelize = require("./util/database");
 const studentRouters = require("./routes/student");
 const courseRoutes = require("./routes/course");
 const resultRouters = require("./routes/result");
-const teacherRouters = require("./routes/teacher");
-const authRouters = require('./routes/auth');
-const userRouters = require('./routes/user');
+const facultyRouters = require("./routes/faculty");
+const authRouters = require("./routes/auth_student");
+const userRouters = require("./routes/user");
 
 //For Database Models
 const Student = require("./models/Student");
+const StudentDetail = require("./models/StudentDetail");
 const Course = require("./models/Course");
+const Faculty = require("./models/Faculty");
+const FacultyDetails = require("./models/FacultyDetail");
+const CourseAssignedTo = require("./models/CourseAssignedTo");
+const Routine = require("./models/Routine");
 const Result = require("./models/Result");
-const Teacher = require("./models/Teacher");
-const StudentProfile = require("./models/StudentProfile");
+const ResultDetail = require("./models/ResultDetail");
 
 const app = express();
 
-app.use(express.urlencoded({extended: true}));
-app.use(express.json()) // To parse the incoming requests with JSON payloads
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json()); // To parse the incoming requests with JSON payloads
 
 //For adding headers
 app.use((req, res, next) => {
@@ -40,39 +44,24 @@ app.use("/user", userRouters);
 app.use("/student", studentRouters);
 app.use("/course", courseRoutes);
 app.use("/result", resultRouters);
-app.use("/teacher", teacherRouters);
+app.use("/faculty", facultyRouters);
 app.use("/auth", authRouters);
 
 //Database Relations
-Student.hasMany(Result, {
-    foreignKey: {
-        name: "studentId",
-        allowNull: false,
-    },
-});
-
-Course.hasMany(Result, {
-    foreignKey: {
-        name: "courseId",
-        allowNull: false,
-    },
-});
-
+Student.hasOne(StudentDetail, { foreignKey: "studentId" });
+Student.hasMany(Result, { foreignKey: "studentId" });
+Faculty.hasOne(FacultyDetails, { foreignKey: "facultyId" });
+Course.hasMany(Result, { foreignKey: "courseId" });
 Course.hasMany(Result);
+Course.hasMany(CourseAssignedTo, { foreignKey: "courseId" });
+Faculty.hasMany(CourseAssignedTo, { foreignKey: "facultyId" });
+CourseAssignedTo.hasMany(Routine, { foreignKey: "assignedCourseId" });
+Result.hasOne(ResultDetail, { foreignKey: "resultId" });
 
-Result.belongsTo(Course);
-
-Student.hasOne(StudentProfile, {
-    foreignKey: {
-        name: "studentNo",
-        allowNull: false
-    }
-});
-
-//Starting listning to app
+//Start listning to app
 sequelize
     .sync()
-    .then((result) => {
+    .then(() => {
         console.log("DATABASE CONNECTED");
         app.listen(8080);
     })

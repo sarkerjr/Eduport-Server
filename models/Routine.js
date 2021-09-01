@@ -17,7 +17,11 @@ const Routine = sequelize.define('routine', {
         allowNull: false
     },
     time: {
-        type: Sequelize.TIME,
+        type: Sequelize.FLOAT,
+        allowNull: false
+    },
+    period: {
+        type: Sequelize.STRING,
         allowNull: false
     },
     duration: {

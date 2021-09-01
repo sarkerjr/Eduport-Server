@@ -1,7 +1,7 @@
 const { validationResult } = require("express-validator");
 
 const Student = require("../models/Student");
-const StudentProfile = require("../models/StudentProfile");
+const StudentDetail = require("../models/StudentDetail");
 const Result = require("../models/Result");
 
 //create a new student profile
@@ -43,50 +43,8 @@ exports.createStudent = (req, res, next) => {
         });
 };
 
-exports.getStudents = (req, res, next) => {
-    Student.findAll()
-        .then((result) => {
-            res.send(result);
-        })
-        .catch((err) => console.log(err));
-};
-
-exports.createStudentProfile = (req, res, next) => {
-    //Check for validation error
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(422).send({
-            isError: true,
-            errorMessage: errors.array(),
-        });
-    }
-
-    StudentProfile.findOrCreate({
-        where: {
-            studentNo: req.body.studentNo,
-            email: req.body.studentEmail,
-            password: req.body.studentPassword,
-        },
-    })
-        .then(([result, created]) => {
-            res.status(201);
-            res.send({
-                isError: false,
-                isCreated: created,
-                result: result,
-            });
-        })
-        .catch((err) => {
-            console.log(err);
-            res.status(206);
-            res.send({
-                isError: true,
-            });
-        });
-};
-
 //Retrieve login student information
-exports.getStudentProfile = (req, res, next) => {
+exports.getStudentDetails = (req, res, next) => {
     Student.findOne({
         where: {
             id: req.body.studentDBId,
@@ -114,29 +72,29 @@ exports.getStudentProfile = (req, res, next) => {
         });
 };
 
-//Retrieving result for login user
-exports.getResults = (req, res, next) => {
-    Result.findAll({
-        where: {
-            studentId: req.body.studentDBId,
-        },
-    })
-        .then((result) => {
-            if (result) {
-                res.status(200);
-                res.send(result);
-            } else {
-                res.status(404);
-                res.send({
-                    message: "No result found!",
-                });
-            }
-        })
-        .catch((err) => {
-            console.log(err);
-            res.status(404);
-            res.send({
-                isError: true,
-            });
+exports.createStudentDetails = async (req, res, next) => {
+    try {
+        const studentDetail = await StudentDetail.findOrCreate({
+            where: {
+                studentId: req.body.studentId,
+                contactNo: req.body.contactNo,
+                dateOfBirth: req.body.dateOfBirth,
+                bloodGroup: req.body.bloodGroup,
+                localAddress: req.body.localAddress,
+                permanentAddress: req.body.permanentAddress,
+                academicBg: req.body.academicBg,
+                medicalBg: req.body.medicalBg,
+            },
         });
+
+        if (studentDetail) {
+            res.status(200);
+            res.send({
+                studentDetail: studentDetail,
+            });
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(206);
+    }
 };

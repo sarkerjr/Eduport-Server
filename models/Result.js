@@ -21,10 +21,6 @@ const Result = sequelize.define('result', {
         type: Sequelize.DataTypes.FLOAT,
         allowNull: false,
     },
-    gpa: {
-        type: Sequelize.DataTypes.FLOAT,
-        allowNull: false,
-    },
     type: {
         type: Sequelize.DataTypes.STRING,
         allowNull: false,

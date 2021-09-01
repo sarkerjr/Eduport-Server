@@ -5,7 +5,7 @@ const router = express.Router();
 
 const userController = require('../controllers/user');
 
-router.post('/createuser',
+router.post('/register',
 body('email')
 .isEmail()
 .withMessage('Please enter a valid email address'),
@@ -17,13 +17,7 @@ body('password')
 body('accountType')
 .isIn(['student', 'faculty', 'stuff']),
 body('department')
-.isAlpaha(),
+.isAlpha(),
 userController.createUser);
-
-router.get('/getuser', 
-body('email')
-.isEmail()
-.withMessage('Please enter a valid email address'),
-userController.loginUser);
 
 module.exports = router;

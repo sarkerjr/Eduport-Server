@@ -8,7 +8,6 @@ exports.createCourse = (req, res, next) => {
     const errors = validationResult(req);
     if(!errors.isEmpty()){
         return res.status(422).send({
-            isError: true,
             errorMessage: errors.array()
         });
     }

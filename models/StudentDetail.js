@@ -15,7 +15,7 @@ const StudentDetails = sequelize.define('student_details', {
         allowNull: false,
     },
     dateOfBirth: {
-        type: Sequelize.DATE,
+        type: Sequelize.DATEONLY,
         allowNull: false,
     },
     bloodGroup: {

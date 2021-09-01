@@ -1,4 +1,4 @@
-const Teacher = require("../models/Teacher");
+const Teacher = require("../models/Faculty");
 
 const { validationResult } = require('express-validator');
 

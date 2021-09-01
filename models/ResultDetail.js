@@ -17,11 +17,7 @@ const ResultDetails = sequelize.define('result_details', {
         type: Sequelize.FLOAT,
         allowNull: true
     },
-    classTest: {
-        type: Sequelize.FLOAT,
-        allowNull: true
-    },
-    viva: {
+    assignment: {
         type: Sequelize.FLOAT,
         allowNull: true
     },

@@ -1,8 +1,11 @@
 const jwt = require('jsonwebtoken');
 
-const User = require('../models/User');
+const User = require('../models/UserAccount');
+const { handleValidationResult } = require('../util/validation');
 
 exports.validateLogin = async (req, res) => {
+    handleValidationResult(req, res);
+
     try{
         const user = await User.findOne({
             where: {
@@ -29,16 +32,11 @@ exports.validateLogin = async (req, res) => {
             });
 
         }else {
-            res.status(404).send({
-                isError: true,
-                errorMessage: "Invalid email or password!"
-            });
+            res.status(404).send("Invalid email or password!");
         }
 
     }catch(err) {
-        console.log(err);
-        res.status(502).send({
-            isError: true
-        });
+        console.log("/auth/login: " + err);
+        res.status(502).send("Something went wrong!");
     }
 }
