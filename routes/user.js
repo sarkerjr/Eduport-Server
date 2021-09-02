@@ -5,7 +5,7 @@ const router = express.Router();
 
 const userController = require('../controllers/user');
 
-router.post('/register',
+router.post('/create',
 body('email')
 .isEmail()
 .withMessage('Please enter a valid email address'),

@@ -1,14 +1,12 @@
-const { validationResult } = require("express-validator");
+const { validationResult } = require('express-validator');
 
 const User = require("../models/UserAccount");
 
-exports.createUser = async (req, res, next) => {
-    //Check for validation error
+exports.createUser = async (req, res) => {
     const errors = validationResult(req);
-    if (!errors.isEmpty()) {
+    if(!errors.isEmpty()){
         return res.status(422).send({
-            isError: true,
-            errorMessage: errors.array(),
+            errorMessage: errors.array()
         });
     }
 
@@ -24,7 +22,6 @@ exports.createUser = async (req, res, next) => {
 
         if (user) {
             res.status(200).send({
-                isError: false,
                 user: user,
             });
         }

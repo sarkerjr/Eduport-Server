@@ -22,6 +22,10 @@ const Student = sequelize.define('student', {
         type: Sequelize.DataTypes.STRING,
         allowNull: false
     },
+    gender: {
+        type: Sequelize.DataTypes.STRING,
+        allowNull: false
+    },
     department: {
         type: Sequelize.DataTypes.STRING,
         allowNull: false
