@@ -55,6 +55,8 @@ Course.hasMany(Result, { foreignKey: "courseId" });
 Course.hasMany(Result);
 Course.hasMany(CourseAssignedTo, { foreignKey: "courseId" });
 Faculty.hasMany(CourseAssignedTo, { foreignKey: "facultyId" });
+CourseAssignedTo.belongsTo(Course, { foreignKey: "courseId" });
+CourseAssignedTo.belongsTo(Faculty, { foreignKey: "facultyId" });
 CourseAssignedTo.hasMany(Routine, { foreignKey: "assignedCourseId" });
 Result.hasOne(ResultDetail, { foreignKey: "resultId" });
 

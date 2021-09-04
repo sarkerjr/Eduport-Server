@@ -8,6 +8,9 @@ const User = require("../models/UserAccount");
 
 const studentController = require("../controllers/student");
 
+/* 
+    Routes can only accessed by Admins 
+*/
 router.post(
     "/create",
     body("userId")
@@ -69,6 +72,10 @@ body('bloodGroup')
 .isIn(["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"]),
 studentController.createStudentDetails);
 
+
+/* 
+    Routes can only accessed by Students 
+*/
 router.get('/profile',
 body('id')
 .isNumeric()

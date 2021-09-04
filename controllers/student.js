@@ -3,7 +3,9 @@ const { validationResult } = require("express-validator");
 const Student = require("../models/Student");
 const StudentDetail = require("../models/StudentDetail");
 
-//create a new student profile
+/* 
+    Controllers used only by Admins
+*/
 exports.createStudent = async (req, res) => {
     //Validation Handling
     const errors = validationResult(req);
@@ -79,6 +81,9 @@ exports.createStudentDetails = async (req, res) => {
     }
 };
 
+/* 
+    Controllers used only by Students
+*/
 exports.getProfile = async (req, res) => {
     //Validation Handling
     const errors = validationResult(req);

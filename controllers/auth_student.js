@@ -1,10 +1,16 @@
 const jwt = require('jsonwebtoken');
 
 const User = require('../models/UserAccount');
-const { handleValidationResult } = require('../util/validation');
+const { validationResult } = require('express-validator');
 
 exports.validateLogin = async (req, res) => {
-    handleValidationResult(req, res);
+    //Validation Handling
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        return res.status(422).send({
+            errorMessage: errors.array()
+        });
+    }
 
     try{
         const user = await User.findOne({
