@@ -10,6 +10,7 @@ const isAuth = require("../middleware/is-auth");
 /* 
     Routes for Admin
 */
+
 // .matches(/^[a-z ]+$/i)
 router.post(
     "/create",
@@ -58,6 +59,7 @@ courseController.assignCourse);
 /* 
         Routes for Students
 */
+
 router.get('/list', 
 body('semester')
 .isNumeric()

@@ -3,23 +3,74 @@ const { body } = require("express-validator");
 
 const router = express.Router();
 
-const teacherControllelr = require("../controllers/faculty");
+const facultyControllelr = require("../controllers/faculty");
+const Faculty = require("../models/Faculty");
 
+/* 
+    Routes for Admins
+*/
+
+// matches(/^[a-z ]+$/i)
 router.post(
-    "/createTeacher",
-    body("teacherName")
-        .matches(/^[a-z ]+$/i)
-        .withMessage("Field can only contain alphabets!")
-        .trim(),
+    "/create",
+    body("name")
+        .trim()
+        .matches(/^[a-z. ]+$/i)
+        .withMessage("Field can only contain alphabets!"),
     body("position")
+        .trim()
+        .matches(/^[a-z ]+$/i)
+        .withMessage("Field can only contain alphabets!"),
+    body("department")
+        .trim()
+        .matches(/^[a-z ]+$/i)
+        .withMessage("Field can only contain alphabets!"),
+    body("status")
+        .trim()
         .matches(/^[a-z ]+$/i)
         .withMessage("Field can only contain alphabets!")
-        .trim(),
-    body("teacherDepartment")
-        .matches(/^[a-z ]+$/i)
-        .withMessage("Field can only contain alphabets!")
-        .trim(),
-    teacherControllelr.createTeacher
+        .isIn(["Active", "On Leave"])
+        .withMessage("Status can only be active or on leave!"),
+    facultyControllelr.createFaculty
 );
+
+router.post('/create/details', 
+body('facultyId')
+.isInt()
+.withMessage('Faculty ID must be an integer')
+.custom(value => { //Looking for "_id" field in Faculty table
+    return Faculty.findOne({where: { id: value }}).then(faculty => {
+        if (!faculty) return Promise.reject("Faculty do not exist.");
+    });
+}),
+body('email')
+.trim()
+.isEmail()
+.withMessage('Please enter a valid email address'),
+body('mobile')
+.trim()
+.isMobilePhone()
+.withMessage('Please enter a valid mobile number'),
+body('website')
+.trim()
+.isURL()
+.withMessage('Please enter a valid website'),
+facultyControllelr.createFacultyDetails);
+
+/* 
+    Routes for Students
+*/
+
+router.get('/get', 
+body('department')
+.isAlpha()
+.withMessage('Department can only contain alphabets'),
+facultyControllelr.getFaculty);
+
+router.get('/get/details', 
+body('facultyId')
+.isInt()
+.withMessage('Faculty ID must be an integer'),
+facultyControllelr.getFacultyDetails);
 
 module.exports = router;
