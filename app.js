@@ -52,7 +52,7 @@ Student.hasOne(StudentDetail, { foreignKey: "studentId" });
 Student.hasMany(Result, { foreignKey: "studentId" });
 Faculty.hasOne(FacultyDetails, { foreignKey: "facultyId" });
 Course.hasMany(Result, { foreignKey: "courseId" });
-Course.hasMany(Result);
+Result.belongsTo(Course, { foreignKey: "courseId" });
 Course.hasMany(CourseAssignedTo, { foreignKey: "courseId" });
 Faculty.hasMany(CourseAssignedTo, { foreignKey: "facultyId" });
 CourseAssignedTo.belongsTo(Course, { foreignKey: "courseId" });

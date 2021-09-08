@@ -1,53 +1,145 @@
 const { validationResult } = require("express-validator");
 
 const Result = require("../models/Result");
-const Course = require('../models/Course');
-const jwt = require("jsonwebtoken");
+const ResultDetails = require("../models/ResultDetail");
+const Course = require("../models/Course");
 
-exports.createResult = (req, res, next) => {
-    Result.findOrCreate({
-        where: {
-            studentId: req.body.studentId,
-            courseId: req.body.courseId,
-            score: req.body.score,
-            cgpa: req.body.cgpa,
-            type: req.body.type,
-        },
-    })
-        .then(([result, created]) => {
-            res.status(201);
-            res.send({
-                isError: false,
-                isCreated: created,
+/* 
+    Controllers for Admin
+*/
+
+exports.createResult = async (req, res) => {
+    //Validation Handling
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).send({
+            errorMessage: errors.array(),
+        });
+    }
+
+    try {
+        const result = await Result.findOrCreate({
+            where: {
+                studentId: req.body.studentId,
+                courseId: req.body.courseId,
+                marks: req.body.marks,
+                type: req.body.type,
+                status: req.body.status,
+            },
+        });
+
+        if (result) {
+            return res.status(200).send({
+                message: "Result Created Successfully",
                 result: result,
             });
-        })
-        .catch((err) => {
-            console.log(err);
-            if (!err.statusCode) {
-                err.statusCode = 500;
-            }
-            next(err);
-        });
+        }
+    } catch (err) {
+        console.log("/create" + err);
+        res.status(500).send("Server Error");
+    }
 };
 
-exports.getResults = async (req, res, next) => {
+exports.createResultDetails = async (req, res) => {
+    //Validation Handling
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).send({
+            errorMessage: errors.array(),
+        });
+    }
+
+    try {
+        const result_details = await ResultDetails.findOrCreate({
+            where: {
+                resultId: req.body.resultId,
+                written: req.body.written,
+                midterm: req.body.midterm,
+                assignment: req.body.assignment,
+                attendence: req.body.attendence,
+            },
+        });
+
+        if (result_details) {
+            return res.status(200).send({
+                message: "Result Details Created Successfully",
+                result_details: result_details,
+            });
+        }
+    } catch (err) {
+        console.log("/create/details" + err);
+        res.status(500).send("Server Error");
+    }
+};
+
+/* 
+    Controllers for Student
+*/
+
+exports.getResults = async (req, res) => {
+    //Validation Handling
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).send({
+            errorMessage: errors.array(),
+        });
+    }
+
     try {
         const results = await Result.findAll({
             where: {
-                studentId: req.body.userId,
+                studentId: req.body.studentId,
+                semester: req.body.semester,
+                year: req.body.year,
             },
-            include: Course
+            attributes: {
+                exclude: ["studentId", "courseId", "createdAt", "updatedAt"],
+            },
+            include: [
+                {
+                    model: Course,
+                    attributes: ["courseName", "courseCode"],
+                },
+            ],
         });
 
-        if (results) res.status(200).json(results);
-        else res.status(404).send("NO RESULT FOUND!");
-        
-    } catch (err) {
-        console.log(err);
-        if (!err.statusCode) {
-            err.statusCode = 500;
+        if (results) {
+            return res.status(200).send({
+                message: "Results Fetched Successfully",
+                results: results,
+            });
         }
-        next(err);
+    } catch (err) {
+        console.log('/result/get' + err);
+        res.status(500).send("Server Error");
     }
 };
+
+exports.getResultDetails = async ( req, res ) => {
+    //Validation Handling
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).send({
+            errorMessage: errors.array(),
+        });
+    }
+
+    try {
+        const details = await ResultDetails.findAll({
+            where: {
+                resultId: req.body.resultId
+            },
+            attributes: { exclude: ["resultId", "createdAt", "updatedAt"] }
+        });
+
+        if (details) {
+            return res.status(200).send({
+                message: "Course Details Fetched Successfully",
+                details: details,
+            });
+        }
+    } catch (err) {
+        console.log('/result/get/details' + err);
+        res.status(500).send("Server Error");
+    }
+}

@@ -17,7 +17,15 @@ const Result = sequelize.define('result', {
         type: Sequelize.DataTypes.INTEGER,
         allowNull: false,
     },
-    score: {
+    semester: {
+        type: Sequelize.DataTypes.INTEGER,
+        allowNull: false,
+    },
+    year: {
+        type: Sequelize.DataTypes.INTEGER,
+        allowNull: false,
+    },
+    marks: {
         type: Sequelize.DataTypes.FLOAT,
         allowNull: false,
     },
