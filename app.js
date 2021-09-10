@@ -8,6 +8,7 @@ const resultRouters = require("./routes/result");
 const facultyRouters = require("./routes/faculty");
 const authRouters = require("./routes/auth_student");
 const userRouters = require("./routes/user");
+const routineRouters = require("./routes/routine");
 
 //For Database Models
 const Student = require("./models/Student");
@@ -46,6 +47,7 @@ app.use("/course", courseRoutes);
 app.use("/result", resultRouters);
 app.use("/faculty", facultyRouters);
 app.use("/auth", authRouters);
+app.use("/routine", routineRouters);
 
 //Database Relations
 Student.hasOne(StudentDetail, { foreignKey: "studentId" });
@@ -58,6 +60,7 @@ Faculty.hasMany(CourseAssignedTo, { foreignKey: "facultyId" });
 CourseAssignedTo.belongsTo(Course, { foreignKey: "courseId" });
 CourseAssignedTo.belongsTo(Faculty, { foreignKey: "facultyId" });
 CourseAssignedTo.hasMany(Routine, { foreignKey: "assignedCourseId" });
+Routine.belongsTo(CourseAssignedTo, { foreignKey: "assignedCourseId" });
 Result.hasOne(ResultDetail, { foreignKey: "resultId" });
 
 //Start listning to app
