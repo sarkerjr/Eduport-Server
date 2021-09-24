@@ -5,6 +5,8 @@ const CourseAssignedTo = require("../models/CourseAssignedTo");
 const Faculty = require("../models/Faculty");
 const Course = require("../models/Course");
 
+const info = require('../util/info');
+
 /* 
     Controllers for admin
 */
@@ -58,6 +60,8 @@ exports.getRoutines = async (req, res) => {
     }
 
     try {
+        const data = await info.getStudentInfo(req.body.id);
+
         const routines = await Routine.findAll({
             where: {
                 // Getting todays day
@@ -72,6 +76,7 @@ exports.getRoutines = async (req, res) => {
                     where: {
                         semester: req.body.semester,
                         year: req.body.year,
+                        department: data.department,
                     },
                     attributes: ["semester", "year"],
                     include: [

@@ -13,28 +13,30 @@ exports.validateLogin = async (req, res) => {
     }
 
     try{
+        //Verify if user exists on database
         const user = await User.findOne({
             where: {
                 email: req.body.email,
                 password: req.body.password
             }
         });
-
+        
+        //If user exists, create token
         if(user){
             const token = jwt.sign(
                 {
                     email: user.email,
                     id: user.id,
-                    category: user.category,
+                    accountType: user.accountType,
                 },
                 "secretKeyIwontTellYou",
                 { expiresIn: "1h" }
             );
-
+            
             res.status(200).json({
                 token: token,
                 userId: user.id,
-                category: user.category
+                accountType: user.accountType
             });
 
         }else {

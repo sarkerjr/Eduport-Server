@@ -19,6 +19,10 @@ const CourseAssignedTo = sequelize.define(
             type: Sequelize.DataTypes.INTEGER,
             allowNull: false,
         },
+        department: {
+            type: Sequelize.DataTypes.STRING,
+            allowNull: false,
+        },
         semester: {
             type: Sequelize.DataTypes.INTEGER,
             allowNull: false,

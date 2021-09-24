@@ -5,7 +5,7 @@ const router = express.Router();
 
 const Course = require("../models/Course");
 const courseController = require("../controllers/course");
-const isAuth = require("../middleware/is-auth");
+const isAuthStudent = require("../middleware/is-auth-student");
 
 /* 
     Routes for Admin
@@ -46,6 +46,9 @@ body('facultyId')
 .isNumeric()
 .isInt({min: 1})
 .withMessage('Faculty ID must be a number greater than 0'),
+body('department')
+.isAlpha()
+.withMessage('Department can only contain letters'),
 body('semester')
 .isNumeric()
 .isInt({min: 1, max: 2})
@@ -69,6 +72,7 @@ body('year')
 .isNumeric()
 .isInt({min: 1, max: 4})
 .withMessage('Year value can be between 1-4'),
+isAuthStudent,
 courseController.getCourseList);
 
 module.exports = router;

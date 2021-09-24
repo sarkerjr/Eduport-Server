@@ -1,5 +1,7 @@
 const { validationResult } = require("express-validator");
 
+const info = require("../util/info");
+
 const Faculty = require("../models/Faculty");
 const FacultyDetails = require("../models/FacultyDetail");
 
@@ -93,14 +95,17 @@ exports.getFaculty = async (req, res) => {
         });
     }
 
+    //Getting department from the logged in user
+    const user = await info.getStudentInfo(req.body.id);
+
     try {
         const faculties = await Faculty.findAll({
             where: {
-                department: req.body.department,
+                department: user.department,
             },
             attributes: {
                 exclude: ["createdAt", "updatedAt"],
-            }
+            },
         });
 
         if (faculties) {
@@ -126,27 +131,45 @@ exports.getFacultyDetails = async (req, res) => {
         });
     }
 
-    try{
-        const facultyDetails = await Faculty.findAll({
+    
+    try {
+        //Getting department from the logged in user
+        const user = await info.getStudentInfo(req.body.id);
+        
+        const facultyDetails = await Faculty.findOne({
             where: {
                 id: req.body.facultyId,
             },
-            include: [{
-                model: FacultyDetails,
-                attributes: { exclude: ["facultyId", "createdAt", "updatedAt"] },
-            }],
-            attributes: ["name", "position"]
+            attributes: { exclude: ["createdAt", "updatedAt"] },
+            include: [
+                {
+                    model: FacultyDetails,
+                    attributes: {
+                        exclude: ["facultyId", "createdAt", "updatedAt"],
+                    },
+                },
+            ]
         });
 
         if (facultyDetails) {
+            //Check if both student and faculty are in the same department
+            if (facultyDetails.department !== user.department) {
+                return res.status(403).send({
+                    errorMessage: "You are not authorized to view this faculty",
+                });
+            }
             res.status(200).json({
                 facultyDetails: facultyDetails,
             });
+        } else {
+            return res.status(404).send({
+                errorMessage: "Faculty not found",
+            });
         }
-    }catch(err){
+    } catch (err) {
         console.log("/faculty/get/details" + err);
         return res.status(500).send({
             errorMessage: err,
         });
     }
-}
+};

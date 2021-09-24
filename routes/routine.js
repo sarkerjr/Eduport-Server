@@ -1,11 +1,12 @@
 const express = require("express");
 const { body } = require("express-validator");
 
-const routineController = require("../controllers/routine");
+const router = express.Router();
 
+const routineController = require("../controllers/routine");
 const CourseAssignedTo = require("../models/CourseAssignedTo");
 
-const router = express.Router();
+const isAuthStudent = require("../middleware/is-auth-student");
 
 /* 
     Routines for admin
@@ -42,6 +43,6 @@ router.post(
     Routines for students
 */
 
-router.get("/get", routineController.getRoutines);
+router.get("/get", isAuthStudent, routineController.getRoutines);
 
 module.exports = router;

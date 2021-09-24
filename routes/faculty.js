@@ -3,6 +3,8 @@ const { body } = require("express-validator");
 
 const router = express.Router();
 
+const isAuthStudent = require("../middleware/is-auth-student");
+
 const facultyControllelr = require("../controllers/faculty");
 const Faculty = require("../models/Faculty");
 
@@ -34,43 +36,40 @@ router.post(
     facultyControllelr.createFaculty
 );
 
-router.post('/create/details', 
-body('facultyId')
-.isInt()
-.withMessage('Faculty ID must be an integer')
-.custom(value => { //Looking for "_id" field in Faculty table
-    return Faculty.findOne({where: { id: value }}).then(faculty => {
-        if (!faculty) return Promise.reject("Faculty do not exist.");
-    });
-}),
-body('email')
-.trim()
-.isEmail()
-.withMessage('Please enter a valid email address'),
-body('mobile')
-.trim()
-.isMobilePhone()
-.withMessage('Please enter a valid mobile number'),
-body('website')
-.trim()
-.isURL()
-.withMessage('Please enter a valid website'),
-facultyControllelr.createFacultyDetails);
+router.post(
+    "/create/details",
+    body("facultyId")
+        .isInt()
+        .withMessage("Faculty ID must be an integer")
+        .custom((value) => {
+            //Looking for "_id" field in Faculty table
+            return Faculty.findOne({ where: { id: value } }).then((faculty) => {
+                if (!faculty) return Promise.reject("Faculty do not exist.");
+            });
+        }),
+    body("email")
+        .trim()
+        .isEmail()
+        .withMessage("Please enter a valid email address"),
+    body("mobile")
+        .trim()
+        .isMobilePhone()
+        .withMessage("Please enter a valid mobile number"),
+    body("website").trim().isURL().withMessage("Please enter a valid website"),
+    facultyControllelr.createFacultyDetails
+);
 
 /* 
     Routes for Students
 */
 
-router.get('/get', 
-body('department')
-.isAlpha()
-.withMessage('Department can only contain alphabets'),
-facultyControllelr.getFaculty);
+router.get("/get", isAuthStudent, facultyControllelr.getFaculty);
 
-router.get('/get/details', 
-body('facultyId')
-.isInt()
-.withMessage('Faculty ID must be an integer'),
-facultyControllelr.getFacultyDetails);
+router.get(
+    "/get/details",
+    body("facultyId").isInt().withMessage("Faculty ID must be an integer"),
+    isAuthStudent,
+    facultyControllelr.getFacultyDetails
+);
 
 module.exports = router;

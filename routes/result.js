@@ -4,9 +4,12 @@ const { body } = require("express-validator");
 const router = express.Router();
 
 const resultController = require("../controllers/result");
+
 const Student = require("../models/Student");
 const Course = require("../models/Course");
 const Result = require("../models/Result");
+
+const isAuthStudent = require("../middleware/is-auth-student");
 
 router.post(
     "/create",
@@ -90,6 +93,7 @@ body('semester')
 body('year')
 .isInt({ min: 1, max: 4 })
 .withMessage("year must be an integer between 1 and 4"),
+isAuthStudent,
 resultController.getResults);
 
 router.get('/get/details', 
@@ -103,6 +107,7 @@ body('resultId')
         }
     });
 }),
+isAuthStudent,
 resultController.getResultDetails);
 
 module.exports = router;

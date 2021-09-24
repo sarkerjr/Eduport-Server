@@ -6,7 +6,7 @@ const studentRouters = require("./routes/student");
 const courseRoutes = require("./routes/course");
 const resultRouters = require("./routes/result");
 const facultyRouters = require("./routes/faculty");
-const authRouters = require("./routes/auth_student");
+const authRouters = require("./routes/auth");
 const userRouters = require("./routes/user");
 const routineRouters = require("./routes/routine");
 
