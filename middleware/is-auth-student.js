@@ -28,6 +28,7 @@ module.exports = (req, res, next) => {
 
             //Passsing the user id of the student in req body
             req.body.id = decoded.id;
+            req.body.token = token;
 
             //Forwading to next middleware
             next();

@@ -3,6 +3,8 @@ const { validationResult } = require("express-validator");
 const Student = require("../models/Student");
 const StudentDetail = require("../models/StudentDetail");
 
+const userInfo = require('../util/info');
+
 /* 
     Controllers used only by Admins
 */
@@ -127,18 +129,24 @@ exports.getProfileDetails = async (req, res) => {
         });
     }
 
+    console.log("ID is: " + req.body.id);
+
+    const data = await userInfo.getStudentInfo(req.body.id);
+
     try{
         const student = await Student.findOne({
             where: {
-                id: req.body.id,
+                id: data.userId,
             },
-            include: [StudentDetail],
+            attributes: {exclude: ['createdAt', 'updatedAt']},
+            include: [{
+                model: StudentDetail,
+                attributes: {exclude: ['createdAt', 'updatedAt']}
+            }],
         });
 
         if(student && student.student_detail){
-            res.status(200).json({
-                profileDetails: profileDetails,
-            });
+            res.status(200).json(student);
         } else {
             res.status(404).json({
                 message: "Student details not found",

@@ -35,7 +35,7 @@ exports.validateLogin = async (req, res) => {
             
             res.status(200).json({
                 token: token,
-                userId: user.id,
+                id: user.id,
                 accountType: user.accountType
             });
 

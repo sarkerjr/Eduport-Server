@@ -5,8 +5,9 @@ const router = express.Router();
 
 const Student = require("../models/Student");
 const User = require("../models/UserAccount");
-
 const studentController = require("../controllers/student");
+
+const isAuth = require("../middleware/is-auth-student");
 
 /* 
     Routes can only accessed by Admins 
@@ -82,10 +83,6 @@ body('id')
 .withMessage("Student ID invalid.")
 ,studentController.getProfile);
 
-router.get('/profile/details',
-body('id')
-.isNumeric()
-.withMessage("Student ID invalid.")
-,studentController.getProfileDetails);
+router.get('/profile/details', isAuth, studentController.getProfileDetails);
 
 module.exports = router;

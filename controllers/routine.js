@@ -74,8 +74,8 @@ exports.getRoutines = async (req, res) => {
                 {
                     model: CourseAssignedTo,
                     where: {
-                        semester: req.body.semester,
-                        year: req.body.year,
+                        semester: req.query.semester,
+                        year: req.query.year,
                         department: data.department,
                     },
                     attributes: ["semester", "year"],
@@ -93,11 +93,10 @@ exports.getRoutines = async (req, res) => {
             ]
         });
 
-        console.log(routines);
-
         if (routines.length == 0) {
             return res.status(200).send({
                 successMessage: "No routine for today",
+                routines: []
             });
         } else if (routines) {
             return res.status(200).send({

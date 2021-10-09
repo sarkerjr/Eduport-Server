@@ -4,7 +4,7 @@ const Course = require("../models/Course");
 const CourseAssignedTo = require("../models/CourseAssignedTo");
 const Faculty = require("../models/Faculty");
 
-const info = require("../util/info");
+const userInfo = require("../util/info");
 
 /* 
     Controllers only for Admins
@@ -77,6 +77,7 @@ exports.assignCourse = async (req, res) => {
 /* 
     Controllers only for Students
 */
+
 //Get course list from a specific semester and year
 exports.getCourseList = async (req, res) => {
     //Validation Handling
@@ -89,7 +90,7 @@ exports.getCourseList = async (req, res) => {
 
     
     try {
-        const data = await info.getStudentInfo(req.body.id);
+        const data = await userInfo.getStudentInfo(req.body.id);
         
         const courses = await CourseAssignedTo.findAll({
             where: {
