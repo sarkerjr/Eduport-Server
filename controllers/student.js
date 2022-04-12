@@ -129,8 +129,6 @@ exports.getProfileDetails = async (req, res) => {
         });
     }
 
-    console.log("ID is: " + req.body.id);
-
     const data = await userInfo.getStudentInfo(req.body.id);
 
     try{
