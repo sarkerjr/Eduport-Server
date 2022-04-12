@@ -29,7 +29,7 @@ exports.validateLogin = async (req, res) => {
                     id: user.id,
                     accountType: user.accountType,
                 },
-                "secretKeyIwontTellYou",
+                process.env.JWT_SECRET_KEY,
                 { expiresIn: "1h" }
             );
             

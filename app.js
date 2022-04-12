@@ -27,7 +27,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); // To parse the incoming requests with JSON payloads
 
 //For adding headers
-app.use((req, res, next) => {
+app.use((_req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader(
         "Access-Control-Allow-Methods",
@@ -68,7 +68,7 @@ sequelize
     .sync()
     .then(() => {
         console.log("DATABASE CONNECTED");
-        app.listen(8080);
+        app.listen(process.env.PORT || 8080);
     })
     .catch((err) => {
         console.log(err);

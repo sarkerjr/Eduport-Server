@@ -11,7 +11,7 @@ module.exports = (req, res, next) => {
 
     // Verify Token
     try {
-        jwt.verify(token, "secretKeyIwontTellYou", (err, decoded) => {
+        jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decoded) => {
             //Check if token is valid
             if (err) {
                 return res.status(401).send({
