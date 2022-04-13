@@ -1,5 +1,11 @@
 const express = require("express");
+const fs = require("fs");
+const path = require("path");
+
 const sequelize = require("./util/database");
+const helmet = require("helmet");
+const compression = require("compression");
+const morgan = require("morgan");
 
 //For routes
 const studentRouters = require("./routes/student");
@@ -25,6 +31,18 @@ const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); // To parse the incoming requests with JSON payloads
+
+//Using a fs to use it with morgan logger
+const accessLogStream = fs.createWriteStream(path.join(__dirname, "access.log"), {
+    flags: "a",
+});
+
+//For adding various useful headers to the response
+app.use(helmet());
+// For compressing files
+app.use(compression());
+// For logging the requests properly
+app.use(morgan("combined", { stream: accessLogStream }));
 
 //For adding headers
 app.use((_req, res, next) => {

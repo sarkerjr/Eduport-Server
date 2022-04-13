@@ -1,3 +1,4 @@
 node_modules
 automation
 nodemon.json
+access.log
