@@ -15,6 +15,7 @@ const facultyRouters = require("./routes/faculty");
 const authRouters = require("./routes/auth");
 const userRouters = require("./routes/user");
 const routineRouters = require("./routes/routine");
+const eventRouters = require("./routes/event");
 
 //For Database Models
 const Student = require("./models/Student");
@@ -66,6 +67,7 @@ app.use("/result", resultRouters);
 app.use("/faculty", facultyRouters);
 app.use("/auth", authRouters);
 app.use("/routine", routineRouters);
+app.use("/event", eventRouters);
 
 //Database Relations
 Student.hasOne(StudentDetail, { foreignKey: "studentId" });

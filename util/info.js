@@ -1,6 +1,7 @@
 /* 
     This file is used for retrieving valid creditials from JSON WEB TOKEN.
 */
+
 const Student = require('../models/Student');
 
 exports.getStudentInfo = async (id) => {

@@ -9,7 +9,7 @@ const FacultyDetails = require("../models/FacultyDetail");
     Controllers for Admins
 */
 
-exports.createFaculty = (req, res) => {
+exports.createFaculty = async (req, res) => {
     //Check for validation error
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -20,7 +20,7 @@ exports.createFaculty = (req, res) => {
     }
 
     try {
-        const faculty = Faculty.findOrCreate({
+        const faculty = await Faculty.findOrCreate({
             where: {
                 name: req.body.name,
                 position: req.body.position,
@@ -34,6 +34,10 @@ exports.createFaculty = (req, res) => {
                 message: "Faculty created successfully",
                 faculty: faculty,
             });
+        }else{
+            res.status(500).json({
+                message: "Faculty creation failed"
+            });
         }
     } catch (err) {
         console.log("/faculty/create" + err);
@@ -43,7 +47,7 @@ exports.createFaculty = (req, res) => {
     }
 };
 
-exports.createFacultyDetails = (req, res) => {
+exports.createFacultyDetails = async (req, res) => {
     //Check for validation error
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -54,7 +58,7 @@ exports.createFacultyDetails = (req, res) => {
     }
 
     try {
-        const facultyDetails = FacultyDetails.findOrCreate({
+        const facultyDetails = await FacultyDetails.findOrCreate({
             where: {
                 facultyId: req.body.facultyId,
                 email: req.body.email,

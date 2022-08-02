@@ -28,6 +28,7 @@ exports.validateLogin = async (req, res) => {
                     email: user.email,
                     id: user.id,
                     accountType: user.accountType,
+                    department: user.department
                 },
                 process.env.JWT_SECRET_KEY,
                 { expiresIn: "1h" }
@@ -42,7 +43,6 @@ exports.validateLogin = async (req, res) => {
         }else {
             res.status(404).send("Invalid email or password!");
         }
-
     }catch(err) {
         console.log("/auth/login: " + err);
         res.status(502).send("Something went wrong!");
