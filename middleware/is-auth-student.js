@@ -26,7 +26,7 @@ module.exports = (req, res, next) => {
                 });
             }
 
-            //Passsing the user id of the student in req body
+            //Passsing the user id and department of the student in req body
             req.body.id = decoded.id;
             req.body.userDepartment = decoded.department;
             req.body.token = token;

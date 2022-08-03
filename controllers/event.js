@@ -49,10 +49,11 @@ exports.getEvents = async (req, res) => {
             errorMessage: errors.array(),
         });
     }
+
     try{
         const events = await Event.findAll({
             where: {
-                hostDepartment: "EEE",
+                hostDepartment: req.body.userDepartment,
                 date: {
                     [Op.or]: {
                         [Op.eq]: new Date(),

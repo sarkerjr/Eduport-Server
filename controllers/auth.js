@@ -27,8 +27,8 @@ exports.validateLogin = async (req, res) => {
                 {
                     email: user.email,
                     id: user.id,
-                    accountType: user.accountType,
-                    department: user.department
+                    department: user.department,
+                    accountType: user.accountType
                 },
                 process.env.JWT_SECRET_KEY,
                 { expiresIn: "1h" }
@@ -37,6 +37,7 @@ exports.validateLogin = async (req, res) => {
             res.status(200).json({
                 token: token,
                 id: user.id,
+                department: user.department,
                 accountType: user.accountType
             });
 

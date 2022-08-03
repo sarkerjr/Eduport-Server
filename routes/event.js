@@ -3,6 +3,7 @@ const { body } = require("express-validator");
 const router = express.Router();
 
 const eventController = require("../controllers/event");
+const isAuthStudent = require("../middleware/is-auth-student");
 
 router.post(
     "/create",
@@ -23,9 +24,10 @@ router.post(
     body("date")
         .isDate()
         .withMessage("Date must be in the format of YYYY-MM-DD"),
+    isAuthStudent,
     eventController.createEvent
 );
 
-router.get("/get", eventController.getEvents);
+router.get("/get", isAuthStudent, eventController.getEvents);
 
 module.exports = router;
