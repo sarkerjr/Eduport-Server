@@ -21,4 +21,4 @@ jobs:
           port: 21
           protocol: 'ftp'
           security: 'strict'
-          server-dir: './eduportapi.smshahriar.com_files/'
+          server-dir: './'
